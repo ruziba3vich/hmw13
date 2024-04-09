@@ -1,6 +1,7 @@
 package models
 
 type Message struct {
-	from           string
+	From           string
 	MessageContext string
+	Status         bool
 }
