@@ -63,7 +63,7 @@ func main() {
 				fmt.Println(err)
 			}
 		} else if status == 2 {
-			messages := u.ShowMessages()
+			messages := u.GetAllMessages()
 			for i := range messages {
 				fmt.Println(messages[i].MessageLook)
 			}
@@ -79,7 +79,12 @@ func main() {
 				fmt.Print("   Enter the corresponding number to the messgae : ")
 				var correspondingNumber int
 				fmt.Scan(&correspondingNumber)
-				u.ReadMessage(correspondingNumber, true)
+				err := u.ReadMessage(correspondingNumber, true)
+				if err == nil {
+					fmt.Println(u.EmailBox[correspondingNumber])
+				} else {
+					fmt.Println(err)
+				}
 			}
 		} else if status == 3 {
 

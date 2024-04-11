@@ -15,8 +15,12 @@ func (u *User) MarkAllAsRead() {
 	u.UnreadMessages = []Message{}
 }
 
-func (u User) ShowMessages() []Message {
+func (u User) GetAllMessages() []Message {
 	return u.EmailBox
+}
+
+func (u User) GetUnreadMessages() []Message {
+	return u.UnreadMessages
 }
 
 func (u *User) RecieveMessage(m Message) {
@@ -43,7 +47,7 @@ func (u *User) ReadMessage(index int, fromBox bool) error {
 }
 
 func (u User) OrderRoom(h Hotel, roomNum uint, nights uint) (bool, error) {
-	err := h.ReservateRoom(roomNum, & UserWithNights{u, nights})
+	err := h.ReservateRoom(roomNum, &UserWithNights{u, nights})
 	if err == nil {
 		return true, nil
 	}
