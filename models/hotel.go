@@ -5,11 +5,6 @@ import (
 	"fmt"
 )
 
-type UserWithNights struct {
-	User   User
-	Nights uint
-}
-
 type Hotel struct {
 	Name          string
 	NumberOfRooms int
@@ -27,14 +22,14 @@ func (h Hotel) GetEmailContents(eContent EmailContent) string {
 }
 
 func (h Hotel) SendEmail(contents string, to User) {
-	to.RecieveMessage(Message{From: h.Name, MessageContext: contents})
+	to.RecieveMessage(Message{From: h.Name, MessageContext: contents, MessageLook: "from " + h.Name + " " + contents[:15]})
 }
 
-func (h *Hotel) ReservateRoom(roomNum uint, u UserWithNights) error {
+func (h *Hotel) ReservateRoom(roomNum uint, u *UserWithNights) error {
 	if (*h).Rooms[roomNum].User.HasRoom {
-		return errors.New("This room is already in use !")
+		return errors.New("this room is already in use")
 	} else {
-		(*h).Rooms[roomNum] = u
+		(*h).Rooms[roomNum] = (*u)
 	}
 	return nil
 }

@@ -30,20 +30,20 @@ func (u *User) ReadMessage(index int, fromBox bool) error {
 			u.EmailBox[index].Status = false
 			return nil
 		} else {
-			return errors.New("Message not found !")
+			return errors.New("message not found")
 		}
 	} else {
 		if len(u.UnreadMessages) > index {
 			u.UnreadMessages[index].Status = false
 			return nil
 		} else {
-			return errors.New("Message not found !")
+			return errors.New("message not found")
 		}
 	}
 }
 
 func (u User) OrderRoom(h Hotel, roomNum uint, nights uint) (bool, error) {
-	err := h.ReservateRoom(roomNum, UserWithNights{u, nights})
+	err := h.ReservateRoom(roomNum, & UserWithNights{u, nights})
 	if err == nil {
 		return true, nil
 	}
