@@ -8,6 +8,7 @@ type User struct {
 	EndDate        string
 	EmailBox       []Message
 	UnreadMessages []Message
+	HasRoom        bool
 }
 
 func (u *User) MarkAllAsRead() {
@@ -39,4 +40,12 @@ func (u *User) ReadMessage(index int, fromBox bool) error {
 			return errors.New("Message not found !")
 		}
 	}
+}
+
+func (u User) OrderRoom(h Hotel, roomNum uint, nights uint) (bool, error) {
+	err := h.ReservateRoom(roomNum, UserWithNights{u, nights})
+	if err == nil {
+		return true, nil
+	}
+	return false, err
 }
