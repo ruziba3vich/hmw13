@@ -87,12 +87,40 @@ func main() {
 				}
 			}
 		} else if status == 3 {
-
+			messages := u.GetUnreadMessages()
+			for i := range messages {
+				fmt.Println(i+1, messages[i].MessageLook)
+			}
+			var choice int
+			fmt.Println()
+			fmt.Println("	1 -> Mark all messages as read")
+			fmt.Println("	2 -> Open a message")
+			fmt.Print("  -> ")
+			fmt.Scan(&choice)
+			if choice == 1 {
+				u.MarkAllAsRead()
+			} else {
+				fmt.Print("   Enter the corresponding number to the messgae : ")
+				var correspondingNumber int
+				fmt.Scan(&correspondingNumber)
+				err := u.ReadMessage(correspondingNumber, false)
+				if err == nil {
+					fmt.Println(u.EmailBox[correspondingNumber])
+				} else {
+					fmt.Println(err)
+				}
+			}
 		} else if status == 4 {
-
+			if u.HasRoom {
+				fmt.Println("You've got a room starting from", u.StartDate, " to", u.EndDate)
+			} else {
+				fmt.Println("You ain't got a room yet . . .")
+			}
 		} else {
 			break
 		}
+		fmt.Print("You want to keep the process going ? 1 / Yes ; 2 / No : ")
+		fmt.Scan(&status)
 	}
 
 	fmt.Println("Thank you for using the program !")
