@@ -11,7 +11,7 @@ type Hotel struct {
 	Rooms         map[uint]UserWithNights
 }
 
-func (h Hotel) GetEmailContents(eContent EmailContent) string {
+func (h *Hotel) GetEmailContents(eContent EmailContent) string {
 	text := `from %s...
 	Dear %s %s,\n your room reservation for room %d for %d night(s) is confirmed. Have a nice day !`
 	return fmt.Sprintf(text, h.Name,
@@ -21,8 +21,9 @@ func (h Hotel) GetEmailContents(eContent EmailContent) string {
 		eContent.nights)
 }
 
-func (h Hotel) SendEmail(contents string, to User) {
-	to.RecieveMessage(Message{From: h.Name, MessageContext: contents, MessageLook: "from " + h.Name + " " + contents[:15]})
+func (h *Hotel) SendEmail(contents string, to *User) {
+	sth := Message{From: (*h).Name, MessageContext: contents, MessageLook: "from " + (*h).Name + " " + contents[:15]}
+	(*to).RecieveMessage(&sth)
 }
 
 func (h *Hotel) ReservateRoom(roomNum uint, u *UserWithNights) error {

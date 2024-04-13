@@ -20,10 +20,11 @@ func main() {
 	var hotels []m.Hotel
 	CreateDummyHotels(&hotels)
 
-	u := m.User{}
+	u := &m.User{}
 
-	fmt.Println("Enter your email : ")
-	fmt.Scan(u.Email)
+	fmt.Print("Enter your email : ")
+	fmt.Scan(&u.Email)
+	fmt.Println(u.Email)
 	status := 1
 
 	for status == 1 {
@@ -35,7 +36,7 @@ func main() {
 		fmt.Scan(&status)
 		if status == 1 {
 			for i := 0; i < len(hotels); i++ {
-				fmt.Println(i+1, hotels[i])
+				fmt.Println(i+1, hotels[i].Name)
 			}
 			fmt.Print("Enter the order number of the hotel : ")
 			var ordNum uint
@@ -43,9 +44,10 @@ func main() {
 			fmt.Print("How many nights you wanna book the room for ? : ")
 			var nights uint
 			fmt.Scan(&nights)
-			rooms := GetAvailableRooms(hotels[ordNum], 0, []uint{})
+			// fmt.Println(hotels[ordNum - 1].Name, ordNum)
+			rooms := GetAvailableRooms(hotels[ordNum-1], 0, []uint{})
 
-			height := GetClosestPerfectSquare(len(rooms))
+			height := GetClosestPerfectSquare(float64(len(rooms)))
 
 			for i := range rooms {
 				fmt.Print(i, " ")
@@ -56,7 +58,8 @@ func main() {
 			var roomNumber uint
 			fmt.Print("Choose one of the rooms you see above : ")
 			fmt.Scan(&roomNumber)
-			ok, err := u.OrderRoom(hotels[ordNum], roomNumber, nights)
+			ok, err := u.OrderRoom(&hotels[ordNum-1], roomNumber, nights)
+			fmt.Println(hotels[ordNum-1].Name, &hotels[ordNum-1])
 			if ok {
 				fmt.Println("Check your e-mail for results")
 			} else {
@@ -176,28 +179,33 @@ func CreateDummyHotels(hotels *[]m.Hotel) {
 }
 
 func GetAvailableRooms(h m.Hotel, ind uint, availableRooms []uint) (rooms []uint) {
+	// fmt.Println(h.Name, ind, availableRooms)
 	if int(ind) < len(h.Rooms) {
+		// fmt.Println(h.Rooms[ind].User.HasRoom)
 		if !h.Rooms[ind].User.HasRoom {
 			availableRooms = append(availableRooms, ind)
 			return GetAvailableRooms(h, ind+1, availableRooms)
 		}
 	}
+	// fmt.Println(h.Name, ind, availableRooms)
 	return availableRooms
 }
 
-func GetClosestPerfectSquare(num int) int {
-	if num < 1 {
-		return 0
-	}
-	sqrt := math.Sqrt(float64(num))
+func GetClosestPerfectSquare(num float64) int {
+	num = math.Abs(num)
+	num = math.Round(num)
+
+	sqrt := math.Sqrt(num)
 	if sqrt == math.Floor(sqrt) {
-		return num
+		return int(num)
 	}
-	less := GetClosestPerfectSquare(num - 1)
-	greater := GetClosestPerfectSquare(num + 1)
-	if num-less < greater-num {
-		return less
+
+	lower := math.Floor(sqrt)
+	upper := math.Ceil(sqrt)
+
+	if num-lower < upper-num {
+		return int(lower * lower)
 	} else {
-		return greater
+		return int(upper * upper)
 	}
 }

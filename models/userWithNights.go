@@ -1,6 +1,6 @@
 package models
 
 type UserWithNights struct {
-	User   User
+	User   *User
 	Nights uint
 }
